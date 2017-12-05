@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import scrapy
 import json
+import artist
 from zhihu.items import User
 from zhihu.items import Topic
 
@@ -14,23 +15,28 @@ class TopicSpider(scrapy.Spider):
     authorization = 'Bearer 2|1:0|10:1511855779|4:z_c0|92:Mi4xSkpyY0JBQUFBQUFBRU1DS0lSNmlDU2NBQUFDRUFsVk5vcU5FV2dDQmxDUUEzNjBfZFpCZ3dyRFBTN3hFdmNITmRR|faa803ec5e0cdeb1b1f667cfadae90a408de6ac5c081fafb9e289da778e011e9'
 
     def start_requests(self):
-        for key in self.keys:
-            yield scrapy.Request(self.url_pattern % key, headers={
+        for item in artist.all():
+            request = scrapy.Request(self.url_pattern % item.artist_name, headers={
                 'Authorization': self.authorization},
-                                 dont_filter=True)
+                                     dont_filter=True)
+            request.meta['artist'] = item
+            yield request
 
     def parse(self, response):
-        if not any(key in response.text for key in self.keys):
+        if response.meta['artist'].artist_name not in response.text:
             return
 
         content = json.loads(response.body)
         for data in content['data']:
-            if data['object']['type'] == 'topic':
+            if 'object' not in data:
+                pass
+            elif data['object']['type'] == 'topic':
                 topic = Topic()
                 for key in data['object']:
                     if key in topic.fields:
                         topic[key] = data['object'][key]
 
+                topic['artist_id'] = response.meta['artist'].id
                 topic['name'] = topic['name'].replace('<em>', '').replace('</em>', '')
                 yield topic
 
@@ -43,10 +49,12 @@ class TopicSpider(scrapy.Spider):
                 yield request
 
         if not content['paging']['is_end']:
-            yield scrapy.Request(
+            request = scrapy.Request(
                 content['paging']['next'].replace('http://www.zhihu.com',
                                                   'https://www.zhihu.com/api/v4'),
                 headers={'Authorization': self.authorization})
+            request.meta['artist'] = response.meta['artist']
+            yield request
 
     def parse_follower(self, response):
         content = json.loads(response.body)

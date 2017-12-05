@@ -42,6 +42,7 @@ class User(Base):
 class Topic(Base):
     __tablename__ = 'topic'
     id = Column(String(10), primary_key=True)
+    artist_id = Column(Integer, nullable=False)
     name = Column(String(150))
     followers_count = Column(Integer)
     questions_count = Column(Integer)
@@ -52,6 +53,7 @@ class Topic(Base):
 class Question(Base):
     __tablename__ = 'question'
     id = Column(String(10), primary_key=True)
+    artist_id = Column(Integer, nullable=False)
     title = Column(String(150))
     answer_count = Column(Integer, default=0)
     comment_count = Column(Integer, default=0)

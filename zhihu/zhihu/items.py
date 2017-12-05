@@ -9,6 +9,7 @@ import scrapy
 
 class Question(scrapy.Item):
     id = scrapy.Field()
+    artist_id = scrapy.Field()
     title = scrapy.Field()
     answer_count = scrapy.Field()
     comment_count = scrapy.Field()
@@ -26,6 +27,7 @@ class Answer(scrapy.Item):
 
 class Topic(scrapy.Item):
     id = scrapy.Field()
+    artist_id = scrapy.Field()
     name = scrapy.Field()
     followers_count = scrapy.Field()
     questions_count = scrapy.Field()

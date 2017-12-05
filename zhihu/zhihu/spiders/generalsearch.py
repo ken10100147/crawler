@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import scrapy
 import json
+import artist
 from zhihu.items import Answer, Question
 
 
@@ -9,22 +10,25 @@ class GeneralSearchSpider(scrapy.Spider):
     allowed_domains = ['www.zhihu.com']
     url_pattern = 'https://www.zhihu.com/api/v4/search_v3?t=general&q=%s&correction=1&offset=0&limit=50'
 
-    keys = [u'王嘉尔']
     authorization = 'Bearer 2|1:0|10:1511855779|4:z_c0|92:Mi4xSkpyY0JBQUFBQUFBRU1DS0lSNmlDU2NBQUFDRUFsVk5vcU5FV2dDQmxDUUEzNjBfZFpCZ3dyRFBTN3hFdmNITmRR|faa803ec5e0cdeb1b1f667cfadae90a408de6ac5c081fafb9e289da778e011e9'
 
     def start_requests(self):
-        for key in self.keys:
-            yield scrapy.Request(self.url_pattern % key, headers={
+        for item in artist.all():
+            request = scrapy.Request(self.url_pattern % item.artist_name, headers={
                 'Authorization': self.authorization},
-                                 dont_filter=True)
+                                     dont_filter=True)
+            request.meta['artist'] = item
+            yield request
 
     def parse(self, response):
-        if not any(key in response.text for key in self.keys):
+        if response.meta['artist'].artist_name not in response.text:
             return
 
         content = json.loads(response.body)
         for data in content['data']:
-            if data['object']['type'] == 'question':
+            if 'object' not in data:
+                pass
+            elif data['object']['type'] == 'question':
                 self.log(data['object']['id'])
                 self.log(data['object']['title'])
             elif data['object']['type'] == 'answer':
@@ -32,6 +36,7 @@ class GeneralSearchSpider(scrapy.Spider):
                                          headers={'Authorization': self.authorization},
                                          callback=self.parse_question)
                 request.meta['question'] = data['object']['question']
+                request.meta['artist'] = response.meta['artist']
                 yield request
             elif data['object']['type'] == 'article':
                 self.log(data['object']['type'])
@@ -41,13 +46,16 @@ class GeneralSearchSpider(scrapy.Spider):
                 self.log(data['object']['type'])
 
         if not content['paging']['is_end']:
-            yield scrapy.Request(
+            request = scrapy.Request(
                 content['paging']['next'].replace('http://www.zhihu.com',
                                                   'https://www.zhihu.com/api/v4'),
                 headers={'Authorization': self.authorization})
+            request.meta['artist'] = response.meta['artist']
+            yield request
 
     def parse_question(self, response):
         yield Question(id=response.meta['question']['id'],
+                       artist_id=response.meta['artist'].id,
                        title=response.xpath('//meta[@itemprop="name"]/@content').extract_first(default=''),
                        answer_count=response.xpath('//meta[@itemprop="answerCount"]/@content').extract_first(
                            default='0'),
