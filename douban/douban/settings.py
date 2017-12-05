@@ -94,5 +94,5 @@ HTTPCACHE_IGNORE_HTTP_CODES = [302, 400, 401, 403, 404, 407, 500, 501, 502, 503]
 RETRY_TIMES = 1
 RETRY_HTTP_CODES = [500, 502, 503, 504, 400, 408, 404, 307, 302, 301, 303, 304, 305, ]  # 403
 
-# LOG_LEVEL = 'WARNING'
-# LOG_FILE = datetime.now().strftime('%Y_%m_%d.log')
+LOG_LEVEL = 'WARNING'
+LOG_FILE = datetime.now().strftime('%Y_%m_%d.log')
