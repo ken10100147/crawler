@@ -22,7 +22,7 @@ class UserSpider(scrapy.Spider):
                         'referer': None})
 
     def parse(self, response):
-        content = json.loads(response.body)
+        content = json.loads(response.body.decode('utf-8'))
         item = User()
         for key in item.fields:
             if key in content:

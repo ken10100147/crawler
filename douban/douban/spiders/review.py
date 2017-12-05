@@ -20,7 +20,7 @@ class ReviewSpider(scrapy.Spider):
             yield request
 
     def parse(self, response):
-        content = json.loads(response.body)
+        content = json.loads(response.body.decode('utf-8'))
         for music in content['musics']:
             if 'author' in music:
                 if any(response.meta['artist'].artist_name == author['name'] for author in music['author']):
