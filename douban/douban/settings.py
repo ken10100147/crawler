@@ -90,5 +90,5 @@ ITEM_PIPELINES = {
 # HTTPCACHE_IGNORE_HTTP_CODES = []
 # HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
-# LOG_LEVEL = 'WARNING'
-# LOG_FILE = datetime.now().strftime('%Y_%m_%d.log')
+LOG_LEVEL = 'WARNING'
+LOG_FILE = datetime.now().strftime('%Y_%m_%d.log')
