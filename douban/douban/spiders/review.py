@@ -54,15 +54,21 @@ class ReviewSpider(scrapy.Spider):
                              './/div[@class="action"]/a[contains(@class,"down")]/span/text()').extract_first(
                              default='0').strip())
 
-        if len(review_list) > 0:
-            if 'start=' in response.url:
-                idx = response.url.index('?start=')
-                request = scrapy.Request(response.url[0:(idx - 1)] + '?start=' + str(
-                    int(response.url[(idx + len('?start=')):len(response.url)]) + 35),
-                                         callback=self.parse_review)
-                request.meta['music'] = response.meta['music']
-                yield request
-            else:
-                request = scrapy.Request(response.url + '?start=35', callback=self.parse_review)
-                request.meta['music'] = response.meta['music']
-                yield request
+        count = int(response.xpath('//h1/text()').re_first('([0-9]{1,})'))
+        for i in range(0, count, 35):
+            request = scrapy.Request(response.url + '?start=' + str(i), callback=self.parse_review)
+            request.meta['music'] = response.meta['music']
+            yield request
+
+        # if len(review_list) > 0:
+        #     if 'start=' in response.url:
+        #         idx = response.url.index('?start=')
+        #         request = scrapy.Request(response.url[0:(idx - 1)] + '?start=' + str(
+        #             int(response.url[(idx + len('?start=')):len(response.url)]) + 35),
+        #                                  callback=self.parse_review)
+        #         request.meta['music'] = response.meta['music']
+        #         yield request
+        #     else:
+        #         request = scrapy.Request(response.url + '?start=35', callback=self.parse_review)
+        #         request.meta['music'] = response.meta['music']
+        #         yield request

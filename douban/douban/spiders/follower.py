@@ -38,16 +38,3 @@ class FollowerSpider(scrapy.Spider):
             uid = dl.xpath('dd/a/@href').extract_first(default='')
             uid = uid[len('https://www.douban.com/people/'):(len(uid) - 1)]
             yield User(id=uid, from_musician=response.meta['musician']['id'])
-
-            # if len(obu_list) > 0:
-            #     if 'start=' in response.url:
-            #         idx = response.url.index('?start=')
-            #         request = scrapy.Request(response.url[0:idx] + '?start=' + str(
-            #             int(response.url[(idx + len('?start=')):len(response.url)]) + 35),
-            #                                  callback=self.parse_followers)
-            #         request.meta['musician'] = response.meta['musician']
-            #         yield request
-            #     else:
-            #         request = scrapy.Request(response.url + '?start=35', callback=self.parse_followers)
-            #         request.meta['musician'] = response.meta['musician']
-            #         yield request
