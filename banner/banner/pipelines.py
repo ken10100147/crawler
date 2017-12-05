@@ -20,11 +20,11 @@
 #     def process_item(self, item, spider):
 #         return item
 from datetime import datetime
-import db
-from db import Recom
-from db import Banner
-from items import Song
-from items import Album
+from banner import db
+from banner.db import Recom
+from banner.db import Banner
+from banner.items import Song
+from banner.items import Album
 
 
 class DBPipeline(object):
