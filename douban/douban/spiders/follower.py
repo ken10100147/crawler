@@ -20,13 +20,16 @@ class FollowerSpider(scrapy.Spider):
                 yield request
 
     def parse(self, response):
+        count = int(response.xpath('//h1/text()').re_first('([0-9]{1,})'))
         musician = Musician(id=response.meta['mid'],
-                            follower_count=response.xpath('//h1/text()').re_first('([0-9]{1,})'))
+                            follower_count=count)
 
         response.meta['musician'] = musician
         yield musician
 
-        for request in self.parse_followers(response):
+        for i in range(0, count, 35):
+            request = scrapy.Request(response.url + '?start=' + str(i), callback=self.parse_followers())
+            request.meta['musician'] = musician
             yield request
 
     def parse_followers(self, response):
@@ -36,15 +39,15 @@ class FollowerSpider(scrapy.Spider):
             uid = uid[len('https://www.douban.com/people/'):(len(uid) - 1)]
             yield User(id=uid, from_musician=response.meta['musician']['id'])
 
-        if len(obu_list) > 0:
-            if 'start=' in response.url:
-                idx = response.url.index('?start=')
-                request = scrapy.Request(response.url[0:idx] + '?start=' + str(
-                    int(response.url[(idx + len('?start=')):len(response.url)]) + 35),
-                                         callback=self.parse_followers)
-                request.meta['musician'] = response.meta['musician']
-                yield request
-            else:
-                request = scrapy.Request(response.url + '?start=35', callback=self.parse_followers)
-                request.meta['musician'] = response.meta['musician']
-                yield request
+            # if len(obu_list) > 0:
+            #     if 'start=' in response.url:
+            #         idx = response.url.index('?start=')
+            #         request = scrapy.Request(response.url[0:idx] + '?start=' + str(
+            #             int(response.url[(idx + len('?start=')):len(response.url)]) + 35),
+            #                                  callback=self.parse_followers)
+            #         request.meta['musician'] = response.meta['musician']
+            #         yield request
+            #     else:
+            #         request = scrapy.Request(response.url + '?start=35', callback=self.parse_followers)
+            #         request.meta['musician'] = response.meta['musician']
+            #         yield request
