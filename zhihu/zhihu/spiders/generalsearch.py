@@ -24,7 +24,7 @@ class GeneralSearchSpider(scrapy.Spider):
         if response.meta['artist'].artist_name not in response.text:
             return
 
-        content = json.loads(response.body)
+        content = json.loads(response.body.decode('utf-8'))
         for data in content['data']:
             if 'object' not in data:
                 pass
@@ -74,7 +74,7 @@ class GeneralSearchSpider(scrapy.Spider):
             callback=self.parse_answer)
 
     def parse_answer(self, response):
-        content = json.loads(response.body)
+        content = json.loads(response.body.decode('utf-8'))
         for data in content['data']:
             yield Answer(id=data['id'],
                          question_id=data['question']['id'],
