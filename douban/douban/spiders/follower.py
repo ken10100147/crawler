@@ -28,7 +28,7 @@ class FollowerSpider(scrapy.Spider):
         yield musician
 
         for i in range(0, count, 35):
-            request = scrapy.Request(response.url + '?start=' + str(i), callback=self.parse_followers())
+            request = scrapy.Request(response.url + '?start=' + str(i), callback=self.parse_followers)
             request.meta['musician'] = musician
             yield request
 
