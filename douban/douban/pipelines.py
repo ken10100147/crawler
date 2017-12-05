@@ -7,7 +7,7 @@
 
 from douban import db
 from douban import items
-from spiders.follower import FollowerSpider
+from douban.spiders.follower import FollowerSpider
 
 
 class DBPipeline(object):
