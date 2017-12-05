@@ -59,16 +59,3 @@ class ReviewSpider(scrapy.Spider):
             request = scrapy.Request(response.url + '?start=' + str(i), callback=self.parse_review)
             request.meta['music'] = response.meta['music']
             yield request
-
-        # if len(review_list) > 0:
-        #     if 'start=' in response.url:
-        #         idx = response.url.index('?start=')
-        #         request = scrapy.Request(response.url[0:(idx - 1)] + '?start=' + str(
-        #             int(response.url[(idx + len('?start=')):len(response.url)]) + 35),
-        #                                  callback=self.parse_review)
-        #         request.meta['music'] = response.meta['music']
-        #         yield request
-        #     else:
-        #         request = scrapy.Request(response.url + '?start=35', callback=self.parse_review)
-        #         request.meta['music'] = response.meta['music']
-        #         yield request
