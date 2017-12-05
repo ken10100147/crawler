@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import scrapy
 import json
-import artist
+from zhihu.spider import artist
 from zhihu.items import Answer, Question
 
 
