@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import scrapy
 import json
-import artist
+from douban.spiders import artist
 from douban.items import Music
 from douban.items import Review
 

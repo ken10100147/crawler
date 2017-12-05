@@ -5,8 +5,8 @@
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
 
-import db
-import items
+from douban import db
+from douban import items
 from spiders.follower import FollowerSpider
 
 

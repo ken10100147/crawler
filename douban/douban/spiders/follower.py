@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import scrapy
-import artist
+from douban.spiders import artist
 from douban.items import Musician
 from douban.items import User
 
