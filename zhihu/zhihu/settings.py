@@ -9,6 +9,8 @@
 #     http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
 #     http://scrapy.readthedocs.org/en/latest/topics/spider-middleware.html
 
+from datetime import datetime
+
 BOT_NAME = 'zhihu'
 
 SPIDER_MODULES = ['zhihu.spiders']
@@ -87,3 +89,6 @@ ITEM_PIPELINES = {
 # HTTPCACHE_DIR = 'httpcache'
 # HTTPCACHE_IGNORE_HTTP_CODES = []
 # HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+
+LOG_LEVEL = 'WARNING'
+LOG_FILE = datetime.now().strftime('%Y_%m_%d.log')

@@ -74,6 +74,7 @@ class Musician(Base):
 class Music(Base):
     __tablename__ = 'music'
     id = Column(String(12), primary_key=True)
+    artist_id = Column(Integer, nullable=False)
     title = Column(String(32))
     author = Column(String(32))
     rating = Column(String(32))

@@ -7,14 +7,14 @@
 
 import db
 import items
-from spiders.musician import MusicianSpider
+from spiders.follower import FollowerSpider
 
 
 class DBPipeline(object):
     def open_spider(self, spider):
         db.attach(self)
 
-        if isinstance(spider, MusicianSpider) and db.MusicianUserAssociation.exists(bind=self.engine):
+        if isinstance(spider, FollowerSpider) and db.MusicianUserAssociation.exists(bind=self.engine):
             db.MusicianUserAssociation.drop(bind=self.engine)
             db.MusicianUserAssociation.create(bind=self.engine)
             self.session.flush()
@@ -74,6 +74,7 @@ class DBPipeline(object):
         music = db.Music() if query.count() == 0 else query.one()
 
         music.id = item['id']
+        music.artist_id = item['artist_id']
         music.title = item['title']
         music.author = ''
         for author in item['author']:

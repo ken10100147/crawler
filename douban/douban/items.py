@@ -10,6 +10,7 @@ import scrapy
 
 class Music(scrapy.Item):
     id = scrapy.Field()
+    artist_id = scrapy.Field()
     title = scrapy.Field()
     author = scrapy.Field()
     rating = scrapy.Field()
