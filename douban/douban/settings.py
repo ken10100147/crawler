@@ -53,9 +53,10 @@ COOKIES_ENABLED = False
 
 # Enable or disable downloader middlewares
 # See http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
-# DOWNLOADER_MIDDLEWARES = {
-#    'douban.middlewares.MyCustomDownloaderMiddleware': 543,
-# }
+DOWNLOADER_MIDDLEWARES = {
+    # 'douban.middlewares.MyCustomDownloaderMiddleware': 543,
+    'douban.middlewares.UserAgentsMiddleware': 543,
+}
 
 # Enable or disable extensions
 # See http://scrapy.readthedocs.org/en/latest/topics/extensions.html
@@ -84,11 +85,14 @@ ITEM_PIPELINES = {
 
 # Enable and configure HTTP caching (disabled by default)
 # See http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html#httpcache-middleware-settings
-# HTTPCACHE_ENABLED = True
-# HTTPCACHE_EXPIRATION_SECS = 0
-# HTTPCACHE_DIR = 'httpcache'
-# HTTPCACHE_IGNORE_HTTP_CODES = []
+DOWNLOAD_TIMEOUT = 5
+HTTPCACHE_ENABLED = False
+HTTPCACHE_EXPIRATION_SECS = 43200
+HTTPCACHE_DIR = 'httpcache'
+HTTPCACHE_IGNORE_HTTP_CODES = [302, 400, 401, 403, 404, 407, 500, 501, 502, 503]
 # HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+RETRY_TIMES = 1
+RETRY_HTTP_CODES = [500, 502, 503, 504, 400, 408, 404, 307, 302, 301, 303, 304, 305, ]  # 403
 
-LOG_LEVEL = 'WARNING'
-LOG_FILE = datetime.now().strftime('%Y_%m_%d.log')
+# LOG_LEVEL = 'WARNING'
+# LOG_FILE = datetime.now().strftime('%Y_%m_%d.log')
