@@ -79,7 +79,7 @@ class UserAgentsMiddleware:
         request.headers["Accept"] = "application/json, text/javascript, */*; q=0.01"
         request.headers["Connection"] = "keep-alive"
         if request.url.find("douban.com") != -1:  # or request.url.find("c.y.qq") != -1:
-            if 'frodo' in request.url:
+            if 'frodo' not in request.url:
                 user_agent = random.choice(user_agents)
                 request.headers['User-Agent'] = user_agent
 
