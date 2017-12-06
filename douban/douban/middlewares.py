@@ -74,12 +74,15 @@ class UserAgentsMiddleware:
             "Mozilla/5.0 (X11; CrOS i686 2268.111.0) AppleWebKit/536.11 (KHTML, like Gecko) Chrome/20.0.1132.57 Safari/536.11",
             "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/536.6 (KHTML, like Gecko) Chrome/20.0.1092.0 Safari/536.6",
         ]
-        # user_agent = random.choice(user_agents)
-        # request.headers['User-Agent'] = user_agent
+
         request.headers["DNT"] = 1
         request.headers["Accept"] = "application/json, text/javascript, */*; q=0.01"
         request.headers["Connection"] = "keep-alive"
         if request.url.find("douban.com") != -1:  # or request.url.find("c.y.qq") != -1:
+            if 'frodo' in request.url:
+                user_agent = random.choice(user_agents)
+                request.headers['User-Agent'] = user_agent
+
             body = urllib2.urlopen("http://127.0.0.1:22345/proxy/checked/list").read()
             proxy_list = json.loads(body.decode('utf-8'))["proxy_list"]
             proxy = random.choice(proxy_list)
