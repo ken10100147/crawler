@@ -26,7 +26,7 @@ class ReviewSpider(scrapy.Spider):
             reply = reply[0:(len(reply) - 2)]
 
             yield Review(id=review.xpath('@data-cid').extract_first(),
-                         music_id=response.meta['music']['id'],
+                         music_id=response.meta['music'].id,
                          title=review.xpath('.//div[@class="main-bd"]/h2/a/text()').extract_first(default=''),
                          summary=review.xpath('.//div[@class="short-content"]/text()').extract_first(
                              default='').strip(),
