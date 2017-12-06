@@ -8,9 +8,9 @@ from sqlalchemy.ext.declarative import declarative_base
 Base = declarative_base()
 
 TopicUserAssociation = Table(
-    'topic_user_association', Base.metadata,
+    'topic_user_association_' + datetime.now().strftime('%Y_%m_%d'), Base.metadata,
     Column('topic_id', String(10), ForeignKey('topic_' + datetime.now().strftime('%Y_%m_%d') + '.id')),
-    Column('user_id', String(32), ForeignKey('user_' + datetime.now().strftime('%Y_%m_%d') + 'id')))
+    Column('user_id', String(32), ForeignKey('user_' + datetime.now().strftime('%Y_%m_%d') + '.id')))
 
 
 class User(Base):
