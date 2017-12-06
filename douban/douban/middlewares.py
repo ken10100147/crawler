@@ -74,8 +74,8 @@ class UserAgentsMiddleware:
             "Mozilla/5.0 (X11; CrOS i686 2268.111.0) AppleWebKit/536.11 (KHTML, like Gecko) Chrome/20.0.1132.57 Safari/536.11",
             "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/536.6 (KHTML, like Gecko) Chrome/20.0.1092.0 Safari/536.6",
         ]
-        user_agent = random.choice(user_agents)
-        request.headers['User-Agent'] = user_agent
+        # user_agent = random.choice(user_agents)
+        # request.headers['User-Agent'] = user_agent
         request.headers["DNT"] = 1
         request.headers["Accept"] = "application/json, text/javascript, */*; q=0.01"
         request.headers["Connection"] = "keep-alive"
