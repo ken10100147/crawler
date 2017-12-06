@@ -56,7 +56,7 @@ class DoubanSpiderMiddleware(object):
         spider.logger.info('Spider opened: %s' % spider.name)
 
 
-from urllib.request import urlopen
+import urllib2
 import json
 import random
 import logging
@@ -80,7 +80,7 @@ class UserAgentsMiddleware:
         request.headers["Accept"] = "application/json, text/javascript, */*; q=0.01"
         request.headers["Connection"] = "keep-alive"
         if request.url.find("douban.com") != -1:  # or request.url.find("c.y.qq") != -1:
-            body = urlopen("http://127.0.0.1:22345/proxy/checked/list").read()
+            body = urllib2.urlopen("http://127.0.0.1:22345/proxy/checked/list").read()
             proxy_list = json.loads(body.decode('utf-8'))["proxy_list"]
             proxy = random.choice(proxy_list)
             request.meta['proxy'] = "http://{proxy_path}".format(proxy_path=":".join(proxy[:2]))
