@@ -40,7 +40,7 @@ class ReviewSpider(scrapy.Spider):
 
         count = int(response.xpath('//h1/text()').re_first('([0-9]{1,})'))
         for i in range(0, count, 35):
-            request = scrapy.Request(response.url + '?start=' + str(i), callback=self.parse_review)
+            request = scrapy.Request(response.url + '?start=' + str(i))
             request.meta['music'] = response.meta['music']
             yield request
 
