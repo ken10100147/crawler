@@ -9,8 +9,8 @@ Base = declarative_base()
 
 TopicUserAssociation = Table(
     'topic_user_association', Base.metadata,
-    Column('topic_id', String(10), ForeignKey(Topic.__tablename__ + '.id')),
-    Column('user_id', String(32), ForeignKey(User.__tablename__ + 'id')))
+    Column('topic_id', String(10), ForeignKey('topic_' + datetime.now().strftime('%Y_%m_%d') + '.id')),
+    Column('user_id', String(32), ForeignKey('user_' + datetime.now().strftime('%Y_%m_%d') + 'id')))
 
 
 class User(Base):
