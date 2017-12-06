@@ -67,7 +67,7 @@ class Question(Base):
 class Answer(Base):
     __tablename__ = 'answer_' + datetime.now().strftime('%Y_%m_%d')
     id = Column(String(10), primary_key=True)
-    question_id = Column(String(10), ForeignKey(Question.__tablename__ + 'id'), nullable=False)
+    question_id = Column(String(10), ForeignKey(Question.__tablename__ + '.id'), nullable=False)
     voteup_count = Column(Integer)
     comment_count = Column(Integer)
     content = Column(String(500))
