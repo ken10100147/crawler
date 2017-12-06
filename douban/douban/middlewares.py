@@ -81,6 +81,6 @@ class UserAgentsMiddleware:
         request.headers["Connection"] = "keep-alive"
         if request.url.find("douban.com") != -1:  # or request.url.find("c.y.qq") != -1:
             body = urlopen("http://127.0.0.1:22345/proxy/checked/list").read()
-            proxy_list = json.loads(body.decode('utf-8'))["proxy_list"]
+            proxy_list = json.loads(body.decode('utf-8')s)["proxy_list"]
             proxy = random.choice(proxy_list)
             request.meta['proxy'] = "http://{proxy_path}".format(proxy_path=":".join(proxy[:2]))

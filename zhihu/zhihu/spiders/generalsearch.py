@@ -67,23 +67,23 @@ class GeneralSearchSpider(scrapy.Spider):
                            '//div[contains(@class,"QuestionFollowStatus-counts")]//div[@class="NumberBoard-item"]/div[@class="NumberBoard-value"]/text()')[
                            1].extract())
 
-        yield scrapy.Request(
-            'https://www.zhihu.com/api/v4/questions/%s/answers?limit=20&offset=0&include=data[*].is_normal,is_sticky,collapsed_by,suggest_edit,comment_count,collapsed_counts,reviewing_comments_count,can_comment,content,editable_content,voteup_count,reshipment_settings,comment_permission,mark_infos,created_time,updated_time,relationship.is_author,voting,is_thanked,is_nothelp,upvoted_followees;data[].author.is_blocking,is_blocked,is_followed,voteup_count,message_thread_token,badge[?(type=best_answerer)].topics' %
-            response.meta['question']['id'],
-            headers={'Authorization': self.authorization},
-            callback=self.parse_answer)
+        # yield scrapy.Request(
+        #     'https://www.zhihu.com/api/v4/questions/%s/answers?limit=20&offset=0&include=data[*].is_normal,is_sticky,collapsed_by,suggest_edit,comment_count,collapsed_counts,reviewing_comments_count,can_comment,content,editable_content,voteup_count,reshipment_settings,comment_permission,mark_infos,created_time,updated_time,relationship.is_author,voting,is_thanked,is_nothelp,upvoted_followees;data[].author.is_blocking,is_blocked,is_followed,voteup_count,message_thread_token,badge[?(type=best_answerer)].topics' %
+        #     response.meta['question']['id'],
+        #     headers={'Authorization': self.authorization},
+        #     callback=self.parse_answer)
 
-    def parse_answer(self, response):
-        content = json.loads(response.body.decode('utf-8'))
-        for data in content['data']:
-            yield Answer(id=data['id'],
-                         question_id=data['question']['id'],
-                         voteup_count=data['voteup_count'],
-                         comment_count=data['comment_count'],
-                         content=data['content'])
-
-        if not content['paging']['is_end']:
-            yield scrapy.Request(
-                content['paging']['next'].replace('http://', 'https://'),
-                headers={'Authorization': self.authorization},
-                callback=self.parse_answer)
+    # def parse_answer(self, response):
+    #     content = json.loads(response.body.decode('utf-8'))
+    #     for data in content['data']:
+    #         yield Answer(id=data['id'],
+    #                      question_id=data['question']['id'],
+    #                      voteup_count=data['voteup_count'],
+    #                      comment_count=data['comment_count'],
+    #                      content=data['content'])
+    #
+    #     if not content['paging']['is_end']:
+    #         yield scrapy.Request(
+    #             content['paging']['next'].replace('http://', 'https://'),
+    #             headers={'Authorization': self.authorization},
+    #             callback=self.parse_answer)

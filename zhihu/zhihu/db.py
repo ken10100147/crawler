@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from datetime import datetime
 from sqlalchemy import create_engine, Table, Boolean, Column, String, Integer, ForeignKey
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import sessionmaker
@@ -13,7 +14,7 @@ TopicUserAssociation = Table(
 
 
 class User(Base):
-    __tablename__ = 'user'
+    __tablename__ = 'user_' + datetime.now().strftime('%Y_%m_%d')
     id = Column(String(32), primary_key=True)
     name = Column(String(32))
     gender = Column(Integer)
@@ -40,7 +41,7 @@ class User(Base):
 
 
 class Topic(Base):
-    __tablename__ = 'topic'
+    __tablename__ = 'topic_' + datetime.now().strftime('%Y_%m_%d')
     id = Column(String(10), primary_key=True)
     artist_id = Column(Integer, nullable=False)
     name = Column(String(150))
@@ -51,7 +52,7 @@ class Topic(Base):
 
 
 class Question(Base):
-    __tablename__ = 'question'
+    __tablename__ = 'question_' + datetime.now().strftime('%Y_%m_%d')
     id = Column(String(10), primary_key=True)
     artist_id = Column(Integer, nullable=False)
     title = Column(String(150))
@@ -64,7 +65,7 @@ class Question(Base):
 
 
 class Answer(Base):
-    __tablename__ = 'answer'
+    __tablename__ = 'answer_' + datetime.now().strftime('%Y_%m_%d')
     id = Column(String(10), primary_key=True)
     question_id = Column(String(10), ForeignKey('question.id'), nullable=False)
     voteup_count = Column(Integer)

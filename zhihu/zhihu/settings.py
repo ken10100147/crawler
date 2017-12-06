@@ -65,9 +65,9 @@ COOKIES_ENABLED = True
 
 # Configure item pipelines
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
-ITEM_PIPELINES = {
-    'zhihu.pipelines.DBPipeline': 300,
-}
+# ITEM_PIPELINES = {
+#     'zhihu.pipelines.DBPipeline': 300,
+# }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See http://doc.scrapy.org/en/latest/topics/autothrottle.html
@@ -93,5 +93,5 @@ HTTPCACHE_IGNORE_HTTP_CODES = [302, 400, 401, 403, 404, 407, 500, 501, 502, 503]
 RETRY_TIMES = 1
 RETRY_HTTP_CODES = [500, 502, 503, 504, 400, 408, 404, 307, 302, 301, 303, 304, 305, ]  # 403
 
-LOG_LEVEL = 'WARNING'
-LOG_FILE = datetime.now().strftime('%Y_%m_%d.log')
+# LOG_LEVEL = 'WARNING'
+# LOG_FILE = datetime.now().strftime('%Y_%m_%d.log')

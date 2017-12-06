@@ -72,17 +72,21 @@ class DBPipeline(object):
             elif key == 'employments':
                 user.employments = ''
                 for employment in item['employments']:
-                    user.employments = user.employments + ',' + self.json_value(json=employment['company'],
+                    company = employment['company'] if 'company' in employment else None
+                    job = employment['job'] if 'job' in employment else None
+                    user.employments = user.employments + ',' + self.json_value(json=company,
                                                                                 key='name') + ':' + \
-                                       self.json_value(json=employment['job'], key='name')
+                                       self.json_value(json=job, key='name')
 
                 user.employments = user.employments.replace(',', '', 1)
             elif key == 'educations':
                 user.educations = ''
                 for education in item['educations']:
-                    user.educations = user.educations + ',' + self.json_value(json=education['school'],
+                    school = education['school'] if 'school' in education else None
+                    major = education['major'] if 'major' in education else None
+                    user.educations = user.educations + ',' + self.json_value(json=school,
                                                                               key='name') + ':' + \
-                                      self.json_value(json=education['major'], key='name')
+                                      self.json_value(json=major, key='name')
 
                 user.educations = user.educations.replace(',', '', 1)
             else:
@@ -116,6 +120,9 @@ class DBPipeline(object):
             self.session.commit()
 
     def json_value(self, json, key, default=''):
+        if json is None:
+            return ''
+
         if key in json:
             return json[key]
         else:
