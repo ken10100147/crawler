@@ -6,7 +6,7 @@
 # See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
 from zhihu import db
 from zhihu import items
-from zhihu.spiders.topic import TopicFollowerSpider
+from zhihu.spiders.topic_follower import TopicFollowerSpider
 
 
 class DBPipeline(object):
