@@ -11,7 +11,7 @@ MusicianUserAssociation = Table(
     'musician_user_association_' + datetime.now().strftime('%Y_%m_%d'), Base.metadata,
     Column('musician_id', String(10), ForeignKey('musician_' + datetime.now().strftime('%Y_%m_%d') + '.id'),
            nullable=False),
-    Column('user_id', String(32), ForeignKey('user' + datetime.now().strftime('%Y_%m_%d') + '.id'), nullable=False))
+    Column('user_id', String(32), ForeignKey('user_' + datetime.now().strftime('%Y_%m_%d') + '.id'), nullable=False))
 
 
 class User(Base):
