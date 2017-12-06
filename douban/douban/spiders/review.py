@@ -15,7 +15,7 @@ class ReviewSpider(scrapy.Spider):
         db.attach(self)
         query = self.session.query(db.Music)
         for music in query.all():
-            request = scrapy.Request(self.url_pattern_search % music.id)
+            request = scrapy.Request(self.url_pattern % music.id)
             request.meta['music'] = music
             yield request
 
