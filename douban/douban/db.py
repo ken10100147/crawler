@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from datetime import datetime
 from sqlalchemy import create_engine, Table, Boolean, Column, String, Integer, ForeignKey
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import sessionmaker
@@ -7,13 +8,14 @@ from sqlalchemy.ext.declarative import declarative_base
 Base = declarative_base()
 
 MusicianUserAssociation = Table(
-    'musician_user_association', Base.metadata,
-    Column('musician_id', String(10), ForeignKey('musician.id'), nullable=False),
-    Column('user_id', String(32), ForeignKey('user.id'), nullable=False))
+    'musician_user_association_' + datetime.now().strftime('%Y_%m_%d'), Base.metadata,
+    Column('musician_id', String(10), ForeignKey('musician_' + datetime.now().strftime('%Y_%m_%d') + '.id'),
+           nullable=False),
+    Column('user_id', String(32), ForeignKey('user' + datetime.now().strftime('%Y_%m_%d') + '.id'), nullable=False))
 
 
 class User(Base):
-    __tablename__ = 'user'
+    __tablename__ = 'user_' + datetime.now().strftime('%Y_%m_%d')
     # basic
     id = Column(String(32), primary_key=True)
     name = Column(String(32))
@@ -64,7 +66,7 @@ class User(Base):
 
 
 class Musician(Base):
-    __tablename__ = 'musician'
+    __tablename__ = 'musician_' + datetime.now().strftime('%Y_%m_%d')
     id = Column(String(12), primary_key=True)
     follower_count = Column(Integer, default=0)
 
@@ -72,7 +74,7 @@ class Musician(Base):
 
 
 class Music(Base):
-    __tablename__ = 'music'
+    __tablename__ = 'music_' + datetime.now().strftime('%Y_%m_%d')
     id = Column(String(12), primary_key=True)
     artist_id = Column(Integer, nullable=False)
     title = Column(String(32))
@@ -82,9 +84,9 @@ class Music(Base):
 
 
 class Review(Base):
-    __tablename__ = 'review'
+    __tablename__ = 'review_' + datetime.now().strftime('%Y_%m_%d')
     id = Column(String(12), primary_key=True)
-    music_id = Column(String(12), ForeignKey('music.id'), nullable=False)
+    music_id = Column(String(12), ForeignKey(Music.__tablename__ + '.id'), nullable=False)
     title = Column(String(150))
     summary = Column(String(300))
     comments = Column(Integer, default=0)
