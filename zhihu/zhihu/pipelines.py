@@ -6,14 +6,14 @@
 # See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
 from zhihu import db
 from zhihu import items
-from zhihu.spiders.topic import TopicSpider
+from zhihu.spiders.topic import TopicFollowerSpider
 
 
 class DBPipeline(object):
     def open_spider(self, spider):
         db.attach(self)
 
-        if isinstance(spider, TopicSpider) and db.TopicUserAssociation.exists(bind=self.engine):
+        if isinstance(spider, TopicFollowerSpider) and db.TopicUserAssociation.exists(bind=self.engine):
             db.TopicUserAssociation.drop(bind=self.engine)
             db.TopicUserAssociation.create(bind=self.engine)
             self.session.flush()
