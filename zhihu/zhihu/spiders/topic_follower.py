@@ -16,10 +16,12 @@ class TopicFollowerSpider(scrapy.Spider):
         db.attach(self)
         query = self.session.query(db.Topic)
         for topic in query.all():
-            request = scrapy.Request('https://www.zhihu.com/api/v4/topics/%s/followers?limit=20&offset=0' % topic.id,
-                                     headers={'Authorization': self.authorization})
-            request.meta['topic'] = topic
-            yield request
+            for i in range(0, int(topic.followers_count), 20):
+                request = scrapy.Request(
+                    'https://www.zhihu.com/api/v4/topics/%s/followers?limit=20&offset=%d' % (topic.id, i),
+                    headers={'Authorization': self.authorization})
+                request.meta['topic'] = topic
+                yield request
 
     def parse(self, response):
         content = json.loads(response.body.decode('utf-8'))
@@ -32,11 +34,11 @@ class TopicFollowerSpider(scrapy.Spider):
             user['from_topic'] = response.meta['topic'].id
             yield user
 
-        if not content['paging']['is_end']:
-            request = scrapy.Request(
-                content['paging']['next'].replace('http://',
-                                                  'https://'),
-                headers={'Authorization': self.authorization})
-
-            request.meta['topic'] = response.meta['topic']
-            yield request
+            # if not content['paging']['is_end']:
+            #     request = scrapy.Request(
+            #         content['paging']['next'].replace('http://',
+            #                                           'https://'),
+            #         headers={'Authorization': self.authorization})
+            #
+            #     request.meta['topic'] = response.meta['topic']
+            #     yield request

@@ -80,8 +80,7 @@ class UserAgentsMiddleware:
         request.headers["Connection"] = "keep-alive"
         if request.url.find("douban.com") != -1:  # or request.url.find("c.y.qq") != -1:
             if 'frodo' not in request.url:
-                user_agent = random.choice(user_agents)
-                request.headers['User-Agent'] = user_agent
+                request.headers['User-Agent'] = random.choice(user_agents)
 
             body = urllib2.urlopen("http://127.0.0.1:22345/proxy/checked/list").read()
             proxy_list = json.loads(body.decode('utf-8'))["proxy_list"]
