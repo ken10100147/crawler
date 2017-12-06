@@ -9,8 +9,8 @@ Base = declarative_base()
 
 TopicUserAssociation = Table(
     'topic_user_association', Base.metadata,
-    Column('topic_id', String(10), ForeignKey('topic.id')),
-    Column('user_id', String(32), ForeignKey('user.id')))
+    Column('topic_id', String(10), ForeignKey(Topic.__tablename__ + '.id')),
+    Column('user_id', String(32), ForeignKey(User.__tablename__ + 'id')))
 
 
 class User(Base):
@@ -67,7 +67,7 @@ class Question(Base):
 class Answer(Base):
     __tablename__ = 'answer_' + datetime.now().strftime('%Y_%m_%d')
     id = Column(String(10), primary_key=True)
-    question_id = Column(String(10), ForeignKey('question.id'), nullable=False)
+    question_id = Column(String(10), ForeignKey(Question.__tablename__ + 'id'), nullable=False)
     voteup_count = Column(Integer)
     comment_count = Column(Integer)
     content = Column(String(500))
