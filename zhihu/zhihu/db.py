@@ -9,7 +9,7 @@ Base = declarative_base()
 TopicUserAssociation = Table(
     'topic_user_association', Base.metadata,
     Column('topic_id', String(10), ForeignKey('topic.id')),
-    Column('user_id', String(32), ForeignKey('user.id')))
+    Column('user_id', String(32), ForeignKey('user_info.user_id')))
 
 CHANNEL = 5
 
