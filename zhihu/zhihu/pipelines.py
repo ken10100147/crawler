@@ -91,13 +91,16 @@ class DBPipeline(object):
                 user.educations = user.educations.replace(',', '', 1)
             elif key == 'id':
                 user.user_id = item['id']
+            elif key == 'name':
+                user.nick = item['name']
+            elif key == 'following_count':
+                user.follow_count = item['following_count']
+            elif key == 'follower_count':
+                user.fans_count = item['follower_count']
             elif hasattr(user, key):
                 setattr(user, key, item[key])
 
-        user.nick = item['name']
         user.channel = db.CHANNEL
-        user.follow_count = item['following_count']
-        user.fans_count = item['follower_count']
 
         if query.count() == 0:
             self.session.add(user)
