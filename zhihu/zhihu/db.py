@@ -9,12 +9,12 @@ Base = declarative_base()
 
 TopicUserAssociation = Table(
     'topic_user_association_' + datetime.now().strftime('%Y_%m_%d'), Base.metadata,
-    Column('topic_id', String(10), ForeignKey('topic_' + datetime.now().strftime('%Y_%m_%d') + '.id')),
-    Column('user_id', String(32), ForeignKey('user_' + datetime.now().strftime('%Y_%m_%d') + '.id')))
+    Column('topic_id', String(10), ForeignKey('topic.id')),
+    Column('user_id', String(32), ForeignKey('user.id')))
 
 
 class User(Base):
-    __tablename__ = 'user_' + datetime.now().strftime('%Y_%m_%d')
+    __tablename__ = 'user'
     id = Column(String(32), primary_key=True)
     name = Column(String(32))
     gender = Column(Integer)
@@ -41,7 +41,7 @@ class User(Base):
 
 
 class Topic(Base):
-    __tablename__ = 'topic_' + datetime.now().strftime('%Y_%m_%d')
+    __tablename__ = 'topic'
     id = Column(String(10), primary_key=True)
     artist_id = Column(Integer, nullable=False)
     name = Column(String(150))
@@ -52,7 +52,7 @@ class Topic(Base):
 
 
 class Question(Base):
-    __tablename__ = 'question_' + datetime.now().strftime('%Y_%m_%d')
+    __tablename__ = 'question'
     id = Column(String(10), primary_key=True)
     artist_id = Column(Integer, nullable=False)
     title = Column(String(150))
@@ -65,7 +65,7 @@ class Question(Base):
 
 
 class Answer(Base):
-    __tablename__ = 'answer_' + datetime.now().strftime('%Y_%m_%d')
+    __tablename__ = 'answer'
     id = Column(String(10), primary_key=True)
     question_id = Column(String(10), ForeignKey(Question.__tablename__ + '.id'), nullable=False)
     voteup_count = Column(Integer)

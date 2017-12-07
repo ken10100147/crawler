@@ -97,15 +97,9 @@ class DBPipeline(object):
             # can delay crawl frequency
             self.session.commit()
 
-        query = self.session.query(db.Topic).filter(db.Topic.id == item['from_topic'])
-        topic = db.Topic(id=item['from_topic']) if query.count() == 0 else query.one()
-        if query.count() == 0:
-            self.session.add(topic)
-            # can delay crawl frequency
-            self.session.commit()
+        if 'from_topic' in item:
             topic = self.session.query(db.Topic).filter(db.Topic.id == item['from_topic']).one()
-
-        topic.followers.append(user)
+            topic.followers.append(user)
 
     def process_topic(self, item):
         query = self.session.query(db.Topic).filter(db.Topic.id == item['id'])

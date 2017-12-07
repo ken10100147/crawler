@@ -9,13 +9,12 @@ Base = declarative_base()
 
 MusicianUserAssociation = Table(
     'musician_user_association_' + datetime.now().strftime('%Y_%m_%d'), Base.metadata,
-    Column('musician_id', String(10), ForeignKey('musician_' + datetime.now().strftime('%Y_%m_%d') + '.id'),
-           nullable=False),
-    Column('user_id', String(32), ForeignKey('user_' + datetime.now().strftime('%Y_%m_%d') + '.id'), nullable=False))
+    Column('musician_id', String(10), ForeignKey('musician.id'), nullable=False),
+    Column('user_id', String(32), ForeignKey('user.id'), nullable=False))
 
 
 class User(Base):
-    __tablename__ = 'user_' + datetime.now().strftime('%Y_%m_%d')
+    __tablename__ = 'user'
     # basic
     id = Column(String(32), primary_key=True)
     name = Column(String(32))
@@ -66,7 +65,7 @@ class User(Base):
 
 
 class Musician(Base):
-    __tablename__ = 'musician_' + datetime.now().strftime('%Y_%m_%d')
+    __tablename__ = 'musician'
     id = Column(String(12), primary_key=True)
     follower_count = Column(Integer, default=0)
 
@@ -74,7 +73,7 @@ class Musician(Base):
 
 
 class Music(Base):
-    __tablename__ = 'music_' + datetime.now().strftime('%Y_%m_%d')
+    __tablename__ = 'music'
     id = Column(String(12), primary_key=True)
     artist_id = Column(Integer, nullable=False)
     title = Column(String(32))
@@ -84,7 +83,7 @@ class Music(Base):
 
 
 class Review(Base):
-    __tablename__ = 'review_' + datetime.now().strftime('%Y_%m_%d')
+    __tablename__ = 'review'
     id = Column(String(12), primary_key=True)
     music_id = Column(String(12), ForeignKey(Music.__tablename__ + '.id'), nullable=False)
     title = Column(String(150))
