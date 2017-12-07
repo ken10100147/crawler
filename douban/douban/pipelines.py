@@ -62,7 +62,7 @@ class DBPipeline(object):
             # can delay crawl frequency
             self.session.commit()
 
-        if 'from_musician' in item.fields:
+        if 'from_musician' in item.keys():
             musician = self.session.query(db.Musician).filter(db.Musician.id == item['from_musician']).one()
             musician.followers.append(user)
 
