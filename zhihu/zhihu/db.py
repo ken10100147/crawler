@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-from datetime import datetime
-from sqlalchemy import create_engine, Table, Boolean, Column, String, Integer, ForeignKey
+from sqlalchemy import create_engine, Table, Column, String, Integer, ForeignKey, SmallInteger
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
@@ -8,27 +7,57 @@ from sqlalchemy.ext.declarative import declarative_base
 Base = declarative_base()
 
 TopicUserAssociation = Table(
-    'topic_user_association_' + datetime.now().strftime('%Y_%m_%d'), Base.metadata,
+    'topic_user_association', Base.metadata,
     Column('topic_id', String(10), ForeignKey('topic.id')),
     Column('user_id', String(32), ForeignKey('user.id')))
 
+CHANNEL = 5
+
+
+# class User(Base):
+#     __tablename__ = 'user'
+#     id = Column(String(32), primary_key=True)
+#     name = Column(String(32))
+#     gender = Column(Integer)
+#     user_type = Column(String(10))
+#     url_token = Column(String(32))
+#     is_org = Column(Boolean)
+#     locations = Column(String(120))
+#     business = Column(String(120))
+#     employments = Column(String(120))
+#     educations = Column(String(120))
+#     sina_weibo_name = Column(String(32))
+#     favorited_count = Column(Integer)
+#     following_count = Column(Integer)
+#     follower_count = Column(Integer)
+#     following_topic_count = Column(Integer)
+#     following_question_count = Column(Integer)
+#     voteup_count = Column(Integer)
+#     answer_count = Column(Integer)
+#     question_count = Column(Integer)
+#     articles_count = Column(Integer)
+#     columns_count = Column(Integer)
+#
+#     topics = relationship('Topic', secondary=TopicUserAssociation, back_populates='followers')
 
 class User(Base):
-    __tablename__ = 'user'
-    id = Column(String(32), primary_key=True)
-    name = Column(String(32))
-    gender = Column(Integer)
-    user_type = Column(String(10))
-    url_token = Column(String(32))
-    is_org = Column(Boolean)
-    locations = Column(String(120))
-    business = Column(String(120))
-    employments = Column(String(120))
-    educations = Column(String(120))
-    sina_weibo_name = Column(String(32))
-    favorited_count = Column(Integer)
-    following_count = Column(Integer)
-    follower_count = Column(Integer)
+    __tablename__ = 'user_info'
+    id = Column(Integer, primary_key=True, nullable=False)
+    nick = Column(String(32))
+    user_id = Column(String(32))
+    channel = Column(Integer)
+    # desc = Column(MEDIUMTEXT)
+    location = Column(String(24))
+    gender = Column(SmallInteger)
+
+    # age = Column(String(8))
+
+    follow_count = Column(Integer)
+    fans_count = Column(Integer)
+    business = Column(String(128))
+    educations = Column(String(128))
+    employments = Column(String(128))
+
     following_topic_count = Column(Integer)
     following_question_count = Column(Integer)
     voteup_count = Column(Integer)
@@ -36,8 +65,6 @@ class User(Base):
     question_count = Column(Integer)
     articles_count = Column(Integer)
     columns_count = Column(Integer)
-
-    topics = relationship('Topic', secondary=TopicUserAssociation, back_populates='followers')
 
 
 class Topic(Base):
@@ -74,6 +101,6 @@ class Answer(Base):
 
 
 def attach(target):
-    target.engine = create_engine('mysql+pymysql://root:root@192.168.0.13/zhihu?charset=utf8mb4')
+    target.engine = create_engine('mysql+pymysql://root:root@192.168.0.13/beatles?charset=utf8mb4&use_unicode=1')
     target.session = sessionmaker(bind=target.engine, autoflush=False)()
     Base.metadata.create_all(target.engine)

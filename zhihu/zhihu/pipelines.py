@@ -57,16 +57,16 @@ class DBPipeline(object):
             self.session.commit()
 
     def process_user(self, item):
-        query = self.session.query(db.User).filter(db.User.id == item['id'])
+        query = self.session.query(db.User).filter(db.User.channel == db.CHANNEL, db.User.user_id == item['id'])
         user = db.User() if query.count() == 0 else query.one()
 
         for key in item:
             if key == 'locations':
-                user.locations = ''
+                user.location = ''
                 for location in item['locations']:
-                    user.locations = user.locations + ',' + location['name']
+                    user.location = user.location + ',' + location['name']
 
-                user.locations = user.locations.replace(',', '', 1)
+                user.location = user.location.replace(',', '', 1)
             elif key == 'business':
                 user.business = item['business']['name']
             elif key == 'employments':
@@ -89,8 +89,15 @@ class DBPipeline(object):
                                       self.json_value(json=major, key='name')
 
                 user.educations = user.educations.replace(',', '', 1)
-            else:
+            elif key == 'id':
+                user.user_id = item['id']
+            elif hasattr(user, key):
                 setattr(user, key, item[key])
+
+        user.nick = item['name']
+        user.channel = db.CHANNEL
+        user.follow_count = item['following_count']
+        user.fans_count = item['follower_count']
 
         if query.count() == 0:
             self.session.add(user)
@@ -99,7 +106,8 @@ class DBPipeline(object):
 
         if 'from_topic' in item.keys():
             topic = self.session.query(db.Topic).filter(db.Topic.id == item['from_topic']).one()
-            topic.followers.append(user)
+            if not any(user.user_id == follower.user_id for follower in topic.followers):
+                topic.followers.append(user)
 
     def process_topic(self, item):
         query = self.session.query(db.Topic).filter(db.Topic.id == item['id'])
