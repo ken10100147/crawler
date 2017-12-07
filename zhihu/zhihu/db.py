@@ -9,7 +9,7 @@ Base = declarative_base()
 TopicUserAssociation = Table(
     'topic_user_association', Base.metadata,
     Column('topic_id', String(10), ForeignKey('topic.id')),
-    Column('user_id', String(32), ForeignKey('user_info.user_id')))
+    Column('user_id', String(32), ForeignKey('user_info.id')))
 
 CHANNEL = 5
 
@@ -65,6 +65,8 @@ class User(Base):
     question_count = Column(Integer)
     articles_count = Column(Integer)
     columns_count = Column(Integer)
+
+    topics = relationship('Topic', secondary=TopicUserAssociation, back_populates='followers')
 
 
 class Topic(Base):
