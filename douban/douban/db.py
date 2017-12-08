@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-from sqlalchemy import create_engine, Table, MEDIUMTEXT, Column, String, Integer, ForeignKey, SmallInteger
-from sqlalchemy.orm import relationship
+from sqlalchemy import create_engine, Table, Column, String, Integer, ForeignKey, SmallInteger
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
@@ -19,7 +18,7 @@ class ArtistFansRelationship(Base):
     id = Column(Integer, primary_key=True)
     channel = Column(String(8))
     artist_id = Column(Integer)
-    fans_id = Column(String(64))
+    fans_id = Column(String(32))
 
 
 class User(Base):
@@ -72,8 +71,8 @@ class User(Base):
 
 
     id = Column(Integer, primary_key=True, nullable=False)
-    nick = Column(String(32))
     user_id = Column(String(32))
+    nick = Column(String(32))
     channel = Column(Integer)
     desc = Column(MEDIUMTEXT)
     location = Column(String(24))
@@ -83,22 +82,11 @@ class User(Base):
 
     follow_count = Column(Integer)
     fans_count = Column(Integer)
-    business = Column(String(128))
-    educations = Column(String(128))
-    employments = Column(String(128))
-
-    following_topic_count = Column(Integer)
-    following_question_count = Column(Integer)
-    voteup_count = Column(Integer)
-    answer_count = Column(Integer)
-    question_count = Column(Integer)
-    articles_count = Column(Integer)
-    columns_count = Column(Integer)
 
     # followings = relationship('Musician', secondary=MusicianUserAssociation, back_populates='followers')
 
 
-class Artists(Base):
+class Artist(Base):
     __tablename__ = 'artists'
     id = Column(Integer, primary_key=True)
     artist_name = Column(String(256))

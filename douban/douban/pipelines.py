@@ -53,9 +53,26 @@ class DBPipeline(object):
         for key in item:
             if key == 'loc':
                 if item[key]:
-                    user.loc = item[key]['name']
-            else:
+                    user.location = item[key]['name']
+            elif key == 'id':
+                user.user_id = item['id']
+            elif key == 'name':
+                user.nick = item['name']
+            elif key == 'gender':
+                if item['gender'] == 'M':
+                    user.gender = 0
+                elif item['gender'] == 'F':
+                    user.gender = 1
+            elif key == 'intro':
+                user.desc = item['intro']
+            elif key == 'followers_count':
+                user.fans_count = item['followers_count']
+            elif key == 'following_count':
+                user.follow_count = item['following_count']
+            elif hasattr(user, key):
                 setattr(user, key, item[key])
+
+        user.channel = db.CHANNEL
 
         if query.count() == 0:
             self.session.add(user)

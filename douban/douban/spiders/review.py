@@ -15,7 +15,7 @@ class ReviewSpider(scrapy.Spider):
         db.attach(self)
         query = self.session.query(db.Music).filter(db.Music.channel == db.CHANNEL)
         for music in query.all():
-            request = scrapy.Request(self.url_pattern % music.id)
+            request = scrapy.Request(self.url_pattern % music.channel_song_id)
             request.meta['music'] = music
             yield request
 
@@ -33,7 +33,7 @@ class ReviewSpider(scrapy.Spider):
             reply = reply[0:(len(reply) - 2)]
 
             yield Review(id=review.xpath('@data-cid').extract_first(),
-                         music_id=response.meta['music'].id,
+                         music_id=response.meta['music'].channel_song_id,
                          title=review.xpath('.//div[@class="main-bd"]/h2/a/text()').extract_first(default=''),
                          summary=review.xpath('.//div[@class="short-content"]/text()').extract_first(
                              default='').strip(),

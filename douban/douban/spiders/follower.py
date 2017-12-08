@@ -13,7 +13,7 @@ class FollowerSpider(scrapy.Spider):
 
     def start_requests(self):
         db.attach(self)
-        for artist in self.session.query(db.Artists).all():
+        for artist in self.session.query(db.Artist).all():
             if artist.douban:
                 request = scrapy.Request(self.url_pattern_musician % artist.douban)
                 request.meta['mid'] = artist.douban
@@ -29,7 +29,7 @@ class FollowerSpider(scrapy.Spider):
 
         for i in range(0, count, 35):
             request = scrapy.Request(response.url + '?start=' + str(i), callback=self.parse_followers)
-            # request.meta['musician'] = musician
+            request.meta['mid'] = response.meta['mid']
             yield request
 
     def parse_followers(self, response):
@@ -37,4 +37,4 @@ class FollowerSpider(scrapy.Spider):
         for dl in obu_list:
             uid = dl.xpath('dd/a/@href').extract_first(default='')
             uid = uid[len('https://www.douban.com/people/'):(len(uid) - 1)]
-            yield User(id=uid, from_musician=response.meta['musician']['id'])
+            yield User(id=uid, from_musician=response.meta['mid'])

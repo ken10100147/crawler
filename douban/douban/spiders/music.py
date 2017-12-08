@@ -14,7 +14,7 @@ class MusicSpider(scrapy.Spider):
 
     def start_requests(self):
         db.attach(self)
-        for artist in self.session.query(db.Artists).all():
+        for artist in self.session.query(db.Artist).all():
             request = scrapy.Request(self.url_pattern_search % artist.artist_name)
             request.meta['artist'] = artist
             yield request
