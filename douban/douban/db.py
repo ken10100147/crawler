@@ -120,7 +120,7 @@ class Music(Base):
 class Review(Base):
     __tablename__ = 'review'
     id = Column(String(12), primary_key=True)
-    music_id = Column(Integer, ForeignKey(Music.__tablename__ + '.id'), nullable=False)
+    music_id = Column(String(32))
     title = Column(String(150))
     summary = Column(String(300))
     comments = Column(Integer, default=0)
