@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from sqlalchemy import create_engine, Table, Column, String, Integer, ForeignKey, SmallInteger
+from sqlalchemy import create_engine, Table, Column, Text, String, Integer, ForeignKey, SmallInteger
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
@@ -53,7 +53,7 @@ class User(Base):
     nick = Column(String(32))
     user_id = Column(String(32))
     channel = Column(Integer)
-    # desc = Column(Text)
+    desc = Column(Text)
     location = Column(String(24))
     gender = Column(SmallInteger)
 

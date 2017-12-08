@@ -38,6 +38,7 @@ class User(scrapy.Item):
     name = scrapy.Field()
     gender = scrapy.Field()
     user_type = scrapy.Field()
+    description = scrapy.Field()
     url_token = scrapy.Field()
     is_org = scrapy.Field()
 

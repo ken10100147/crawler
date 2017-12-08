@@ -88,6 +88,8 @@ class DBPipeline(object):
                 user.user_id = item['id']
             elif key == 'name':
                 user.nick = item['name']
+            elif key == 'description':
+                user.desc = item['description']
             elif key == 'following_count':
                 user.follow_count = item['following_count']
             elif key == 'follower_count':
