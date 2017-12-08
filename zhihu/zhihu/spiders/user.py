@@ -17,7 +17,7 @@ class UserSpider(scrapy.Spider):
         db.attach(self)
         query = self.session.query(db.User).filter(db.User.channel == db.CHANNEL)
         for user in query.all():
-            if not any(user.business is None, user.educations is None, user.employments is None):
+            if not any([user.business is None, user.educations is None, user.employments is None]):
                 yield scrapy.Request(self.url_pattern % user.id,
                                      headers={'Authorization': self.authorization})
 
