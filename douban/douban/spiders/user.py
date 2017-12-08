@@ -14,7 +14,7 @@ class UserSpider(scrapy.Spider):
         db.attach(self)
         query = self.session.query(db.User).filter(db.User.channel == db.CHANNEL)
         for user in query.all():
-            if user.name is None:
+            if user.nick is None:
                 yield scrapy.Request(
                     'https://frodo.douban.com/api/v2/user/' + user.user_id + '?os_rom=flyme4&apikey=0dad551ec0f84ed02907ff5c42e8ec70&channel=Meizu_Market&udid=05ac1c24d6c2fe71c303c65f32b41d915343b987&_sig=vRQoW7znmzvf6mMJpw3jmJUPgpc%3D&_ts=1512110532',
                     headers={
