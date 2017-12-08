@@ -136,7 +136,7 @@ def attach(target):
     global ENGINE
     global SESSION
     if ENGINE is None:
-        ENGINE = create_engine('mysql+pymysql://root:root@192.168.0.13/douban?charset=utf8mb4')
+        ENGINE = create_engine('mysql+pymysql://root:root@192.168.0.13/beatles?charset=utf8mb4&use_unicode=1')
         SESSION = sessionmaker(bind=ENGINE, autoflush=False)()
         Base.metadata.create_all(ENGINE)
 
