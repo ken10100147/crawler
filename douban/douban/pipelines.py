@@ -7,17 +7,10 @@
 
 from douban import db
 from douban import items
-from douban.spiders.follower import FollowerSpider
-
 
 class DBPipeline(object):
     def open_spider(self, spider):
         db.attach(self)
-
-        if isinstance(spider, FollowerSpider) and db.MusicianUserAssociation.exists(bind=self.engine):
-            db.MusicianUserAssociation.drop(bind=self.engine)
-            db.MusicianUserAssociation.create(bind=self.engine)
-            self.session.flush()
 
     def close_spider(self, spider):
         self.session.commit()

@@ -13,11 +13,6 @@ class DBPipeline(object):
     def open_spider(self, spider):
         db.attach(self)
 
-        if isinstance(spider, TopicFollowerSpider) and db.TopicUserAssociation.exists(bind=self.engine):
-            db.TopicUserAssociation.drop(bind=self.engine)
-            db.TopicUserAssociation.create(bind=self.engine)
-            self.session.flush()
-
     def close_spider(self, spider):
         self.session.commit()
 
