@@ -17,7 +17,7 @@ class AnswerSpider(scrapy.Spider):
         db.attach(self)
         query = self.session.query(db.Question)
         for question in query.all():
-            for i in range(0, int(question.answer_count), 20):
+            for i in range(0, min(int(question.answer_count), 100), 20):
                 yield scrapy.Request(self.url_pattern % (question.id, i),
                                      headers={'Authorization': self.authorization})
 
@@ -30,7 +30,7 @@ class AnswerSpider(scrapy.Spider):
                          comment_count=data['comment_count'],
                          content=data['content'])
 
-        # if not content['paging']['is_end']:
-        #     yield scrapy.Request(
-        #         content['paging']['next'].replace('http://', 'https://'),
-        #         headers={'Authorization': self.authorization})
+            # if not content['paging']['is_end']:
+            #     yield scrapy.Request(
+            #         content['paging']['next'].replace('http://', 'https://'),
+            #         headers={'Authorization': self.authorization})
