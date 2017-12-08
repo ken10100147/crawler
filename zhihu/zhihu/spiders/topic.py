@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import scrapy
 import json
-from zhihu.spiders import artist
 from zhihu.items import Topic
 from zhihu import db
 
