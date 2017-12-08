@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 import scrapy
-from douban.spiders import artist
-from douban.items import Musician
 from douban.items import User
+from douban import db
 
 
 class FollowerSpider(scrapy.Spider):
@@ -13,23 +12,24 @@ class FollowerSpider(scrapy.Spider):
     url_pattern_musician = 'https://music.douban.com/musician/%s/fans'
 
     def start_requests(self):
-        for item in artist.all():
-            if item.douban:
-                request = scrapy.Request(self.url_pattern_musician % item.douban)
-                request.meta['mid'] = item.douban
+        db.attach(self)
+        for artist in self.session.query(db.Artists).all():
+            if artist.douban:
+                request = scrapy.Request(self.url_pattern_musician % artist.douban)
+                request.meta['mid'] = artist.douban
                 yield request
 
     def parse(self, response):
         count = int(response.xpath('//h1/text()').re_first('([0-9]{1,})'))
-        musician = Musician(id=response.meta['mid'],
-                            follower_count=count)
-
-        response.meta['musician'] = musician
-        yield musician
+        # musician = Musician(id=response.meta['mid'],
+        #                     follower_count=count)
+        #
+        # response.meta['musician'] = musician
+        # yield musician
 
         for i in range(0, count, 35):
             request = scrapy.Request(response.url + '?start=' + str(i), callback=self.parse_followers)
-            request.meta['musician'] = musician
+            # request.meta['musician'] = musician
             yield request
 
     def parse_followers(self, response):

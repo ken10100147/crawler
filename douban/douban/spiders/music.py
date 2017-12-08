@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 import scrapy
 import json
-from douban.spiders import artist
 from douban.items import Music
+from douban import db
 
 
 class MusicSpider(scrapy.Spider):
@@ -13,9 +13,10 @@ class MusicSpider(scrapy.Spider):
     url_pattern_search = 'https://api.douban.com/v2/music/search?q=%s'
 
     def start_requests(self):
-        for item in artist.all():
-            request = scrapy.Request(self.url_pattern_search % item.artist_name)
-            request.meta['artist'] = item
+        db.attach(self)
+        for artist in self.session.query(db.Artists).all():
+            request = scrapy.Request(self.url_pattern_search % artist.artist_name)
+            request.meta['artist'] = artist
             yield request
 
     def parse(self, response):

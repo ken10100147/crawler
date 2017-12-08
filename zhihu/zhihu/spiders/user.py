@@ -15,10 +15,11 @@ class UserSpider(scrapy.Spider):
 
     def start_requests(self):
         db.attach(self)
-        query = self.session.query(db.User)
+        query = self.session.query(db.User).filter(db.User.channel == db.CHANNEL)
         for user in query.all():
-            yield scrapy.Request(self.url_pattern % user.id,
-                                 headers={'Authorization': self.authorization})
+            if not any(user.business is None, user.educations is None, user.employments is None):
+                yield scrapy.Request(self.url_pattern % user.id,
+                                     headers={'Authorization': self.authorization})
 
     def parse(self, response):
         content = json.loads(response.body.decode('utf-8'))

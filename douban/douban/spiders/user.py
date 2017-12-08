@@ -12,7 +12,7 @@ class UserSpider(scrapy.Spider):
 
     def start_requests(self):
         db.attach(self)
-        query = self.session.query(db.User)
+        query = self.session.query(db.User).filter(db.User.channel == db.CHANNEL)
         for user in query.all():
             if user.name is None:
                 yield scrapy.Request(

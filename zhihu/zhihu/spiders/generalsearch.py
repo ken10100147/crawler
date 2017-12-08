@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 import scrapy
 import json
-from zhihu.spiders import artist
 from zhihu.items import Answer, Question
+from zhihu import db
 
 
 class GeneralSearchSpider(scrapy.Spider):
@@ -13,11 +13,12 @@ class GeneralSearchSpider(scrapy.Spider):
     authorization = 'Bearer 2|1:0|10:1511855779|4:z_c0|92:Mi4xSkpyY0JBQUFBQUFBRU1DS0lSNmlDU2NBQUFDRUFsVk5vcU5FV2dDQmxDUUEzNjBfZFpCZ3dyRFBTN3hFdmNITmRR|faa803ec5e0cdeb1b1f667cfadae90a408de6ac5c081fafb9e289da778e011e9'
 
     def start_requests(self):
-        for item in artist.all():
-            request = scrapy.Request(self.url_pattern % item.artist_name, headers={
+        db.attach(self)
+        for artist in self.session.query(db.Artist).all():
+            request = scrapy.Request(self.url_pattern % artist.artist_name, headers={
                 'Authorization': self.authorization},
                                      dont_filter=True)
-            request.meta['artist'] = item
+            request.meta['artist'] = artist
             yield request
 
     def parse(self, response):
@@ -73,17 +74,17 @@ class GeneralSearchSpider(scrapy.Spider):
         #     headers={'Authorization': self.authorization},
         #     callback=self.parse_answer)
 
-    # def parse_answer(self, response):
-    #     content = json.loads(response.body.decode('utf-8'))
-    #     for data in content['data']:
-    #         yield Answer(id=data['id'],
-    #                      question_id=data['question']['id'],
-    #                      voteup_count=data['voteup_count'],
-    #                      comment_count=data['comment_count'],
-    #                      content=data['content'])
-    #
-    #     if not content['paging']['is_end']:
-    #         yield scrapy.Request(
-    #             content['paging']['next'].replace('http://', 'https://'),
-    #             headers={'Authorization': self.authorization},
-    #             callback=self.parse_answer)
+        # def parse_answer(self, response):
+        #     content = json.loads(response.body.decode('utf-8'))
+        #     for data in content['data']:
+        #         yield Answer(id=data['id'],
+        #                      question_id=data['question']['id'],
+        #                      voteup_count=data['voteup_count'],
+        #                      comment_count=data['comment_count'],
+        #                      content=data['content'])
+        #
+        #     if not content['paging']['is_end']:
+        #         yield scrapy.Request(
+        #             content['paging']['next'].replace('http://', 'https://'),
+        #             headers={'Authorization': self.authorization},
+        #             callback=self.parse_answer)

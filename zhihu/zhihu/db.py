@@ -40,6 +40,13 @@ CHANNEL = 5
 #
 #     topics = relationship('Topic', secondary=TopicUserAssociation, back_populates='followers')
 
+class Artists(Base):
+    __tablename__ = 'artists'
+    id = Column(Integer, primary_key=True)
+    artist_name = Column(String(256))
+    douban = Column(String(32))
+
+
 class User(Base):
     __tablename__ = 'user_info'
     id = Column(Integer, primary_key=True, nullable=False)

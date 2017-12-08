@@ -34,17 +34,17 @@ class DBPipeline(object):
 
         return item
 
-    def process_musician(self, item):
-        query = self.session.query(db.Musician).filter(db.Musician.id == item['id'])
-        musician = db.Musician() if query.count() == 0 else query.one()
-
-        musician.id = item['id']
-        musician.follower_count = item['follower_count']
-
-        if query.count() == 0:
-            self.session.add(musician)
-            # can delay crawl frequency
-            self.session.commit()
+    # def process_musician(self, item):
+    #     query = self.session.query(db.Musician).filter(db.Musician.id == item['id'])
+    #     musician = db.Musician() if query.count() == 0 else query.one()
+    #
+    #     musician.id = item['id']
+    #     musician.follower_count = item['follower_count']
+    #
+    #     if query.count() == 0:
+    #         self.session.add(musician)
+    #         # can delay crawl frequency
+    #         self.session.commit()
 
     def process_user(self, item):
         query = self.session.query(db.User).filter(db.User.id == item['id'])
@@ -63,25 +63,30 @@ class DBPipeline(object):
             self.session.commit()
 
         if 'from_musician' in item.keys():
-            musician = self.session.query(db.Musician).filter(db.Musician.id == item['from_musician']).one()
-            musician.followers.append(user)
+            query = self.session.query(db.ArtistFansRelationship).filter(
+                db.ArtistFansRelationship.channel == db.CHANNEL,
+                db.ArtistFansRelationship.artist_id == item['from_musician'],
+                db.ArtistFansRelationship.fans_id == item['id'])
 
-        # save adjust
-        self.session.commit()
+            if query.count() == 0:
+                self.session.add(
+                    db.ArtistFansRelationship(channel=db.CHANNEL, artist_id=item['from_musician'], fans_id=item['id']))
+                self.session.commit()
 
     def process_music(self, item):
         query = self.session.query(db.Music).filter(db.Music.id == item['id'])
         music = db.Music() if query.count() == 0 else query.one()
 
-        music.id = item['id']
+        music.channel_song_id = item['id']
         music.artist_id = item['artist_id']
-        music.title = item['title']
-        music.author = ''
-        for author in item['author']:
-            music.author = music.author + ',' + author['name']
-        music.author = music.author.replace(',', '', 1)
-        music.rating = item['rating']['average']
-        music.rater_number = item['rating']['numRaters']
+        music.channel_song_name = item['title']
+        music.channel = db.CHANNEL
+        # music.author = ''
+        # for author in item['author']:
+        #     music.author = music.author + ',' + author['name']
+        # music.author = music.author.replace(',', '', 1)
+        # music.rating = item['rating']['average']
+        # music.rater_number = item['rating']['numRaters']
 
         if query.count() == 0:
             self.session.add(music)
