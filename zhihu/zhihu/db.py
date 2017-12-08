@@ -53,7 +53,7 @@ class User(Base):
     nick = Column(String(32))
     user_id = Column(String(32))
     channel = Column(Integer)
-    # desc = Column(MEDIUMTEXT)
+    # desc = Column(Text)
     location = Column(String(24))
     gender = Column(SmallInteger)
 
