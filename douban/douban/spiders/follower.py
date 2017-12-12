@@ -16,7 +16,7 @@ class FollowerSpider(scrapy.Spider):
         for artist in self.session.query(db.Artist).all():
             if artist.douban:
                 request = scrapy.Request(self.url_pattern_musician % artist.douban)
-                request.meta['mid'] = artist.douban
+                request.meta['mid'] = artist.id
                 yield request
 
     def parse(self, response):
